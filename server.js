@@ -116,7 +116,12 @@ app.post("/users/doctors", (req, res) => {
 });
 //
 // Return a list of all doctors
-app.get("/users/doctors", (req, res) => {});
+app.get("/users/doctors", (req, res) => {
+    pool.query(`SELECT * FROM doctors`,(err,results) =>{
+        if (err) throw err;
+        res.json(results.rows);
+    })
+});
 //
 //Messages endpoints
 //1. sending
