@@ -2,14 +2,16 @@
   "name": "android_health_tracker",
   "version": "1.0.0",
   "description": "an android consultations application",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "ws": "^8.11.0"
   }
