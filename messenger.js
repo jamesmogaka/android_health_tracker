@@ -1,22 +1,7 @@
 //Module importation
-// Express for sever routing 
-const express = require('express');
-//
-//Web sockets for handling the chat 
 const webSocket = require('ws');
-//
-//create an instance of express
-const app = express();
-//
-//Setting up the routes 
-app.get('/',(req, res) => {
-    res.send("Hello World");
-});
-//
-//Create a server listening at a specified port
-const server = app.listen(8080, () => {
-    console.log("Server started and listening at port 8080");
-});
+const server = require('./server')
+
 //
 //Create a web socket server
 const wss = new WebSocket.server({server});
