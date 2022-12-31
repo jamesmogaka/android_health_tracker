@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 8080;
 //
 //Middleware 
-//app.use(express.urlencoded({ extended: false }));   // enables passage of data between front and back end through html
+app.use(express.urlencoded({ extended: false }));   // enables passage of data between front and back end through html
 app.use(express.json()) // parses request with body content type json
 
 //creation of the routes and how to handle them
