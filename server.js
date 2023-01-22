@@ -20,6 +20,8 @@ app.get("/", (req, res) => {
 //
 //patients registration
 app.post("/Users/patients", (req, res) => {
+    //method addUser(patient:json):String[]{}
+
     //
     // retrieve and store user data as json object
     let patient = req.body;
@@ -137,5 +139,4 @@ const server = app.listen(port, () => {
   console.log(`server listening http://localhost:${port}/`);
 });
 
-//
-module.exports = server;
+export default server;
