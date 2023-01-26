@@ -108,3 +108,7 @@ function addUser(category, personalInfo) {
   }
   }
 }
+
+//
+//exports
+module.exports = {addUser};
