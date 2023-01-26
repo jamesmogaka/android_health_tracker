@@ -10,7 +10,8 @@ A backend node.js server capable of facilitating real-time communications(consul
    
 2. [ ] **User authentication, authorization and creation** - A user authentication and authorization system to ensure that only authorized users can access the system functionality. *Firebase authentication*
     1. [ ] Investigate on how firebase phone no authentication works in relation to the server.(front end)
-    2. [ ] Develop a user module responsible for registration of new users(patients and doctors).    
+    2. [ ] Develop a user module responsible for registration of new users(patients and doctors).   
+    3. [ ] Develop a module to delete a given user 
 3. [ ] **Real-time communication** - The ability to send and receive messages in real-time, allowing for instant communication. *socket.io*
     1. [ ] Develop a module to handle connections and a register for the connected users.
     2. [ ] Develop a module to handle user to user messaging.
