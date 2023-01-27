@@ -7,7 +7,8 @@ const addUser =require("../helpers/user").addUser;
 const userRouter = express.Router();
 
 // patient routes /patient
-
+//
+//1.patient creation endpoint
 userRouter.route("/patient")
 .get((req,res) =>{
 //
@@ -18,6 +19,9 @@ userRouter.route("/patient")
     //Add a patient user.
     addUser("patient",req.body);
 })
+//
+//2.Delete & modify patient info endpoint
+
 //
 //
 
@@ -34,6 +38,8 @@ userRouter.route("/doctor")
 addUser("doctor",req.body);
 
 })
+//
+//Delete & modify doctor info endpoint
 
 
 module.exports = userRouter;
