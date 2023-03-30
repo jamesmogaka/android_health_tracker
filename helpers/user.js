@@ -11,100 +11,76 @@ function addUser(category, personalInfo) {
   if (category == "patient") {
     //Validation of user input
     if (
-      validator.isEmpty(patient.f_name) ||
-      validator.isEmpty(patient.l_name) ||
-      validator.isEmpty(patient.date_of_birth) ||
-      validator.isEmpty(patient.contact) ||
-      validator.isEmpty(patient.patient_address)
+      validator.isEmpty(personalInfo.f_name) ||
+      validator.isEmpty(personalInfo.l_name) ||
+      validator.isEmpty(personalInfo.date_of_birth) ||
+      validator.isEmpty(personalInfo.contact) ||
+      validator.isEmpty(personalInfo.patient_address)
     ) {
       errors.push({ message: "All records required" });
     }
     //
     //Check if there are any errors
     if (errors.length > 0) {
-      res.json(errors);
-      res.end();
+      return errors;
     } else {
       //db checks then storage after passing validation
       pool.query(
         `SELECT * FROM patients 
             WHERE contact = $1`,
-        [patient.contact],
-        (err, results) => {
-          if (err) {
-            //
-            //Crash whenever there is an error executing the query
-            throw err;
-          }
-          //
-          //
-          if (results.rows.length > 0) {
-            errors.push({
-              message: "User with similar phone number already registered",
-            });
-            res.json(errors);
-            res.end();
-          } else {
-            pool.query(
-              `INSERT INTO patients( f_name, l_name, date_of_birth, contact, patient_address) 
-                        VALUES ($1, $2, $3, $4, $5)`,
-              [
-                patient.f_name,
-                patient.l_name,
-                patient.date_of_birth,
-                patient.contact,
-                patient.patient_address,
-              ],
-              (err, results) => {
-                if (err) {
-                  throw err;
-                }
-              }
-            );
-          }
+        [personalInfo.contact]).then((result) => {
+        if (result.rows.length > 0) {
+          errors.push({
+            message: "User with similar phone number already registered",
+          });
+          return errors;
+        } else {
+          pool.query(
+            `INSERT INTO patients( f_name, l_name, date_of_birth, contact, patient_address) 
+                      VALUES ($1, $2, $3, $4, $5)`,
+            [
+              personalInfo.f_name,
+              personalInfo.l_name,
+              personalInfo.date_of_birth,
+              personalInfo.contact,
+              personalInfo.patient_address,
+            ]) .then((result) => {return result.rows;})
+            .catch((err) => {throw err;});
         }
-      );
+      })
+      .catch((err) => {throw err;});
     }
   } else {
     //Validation of user input
-    validator.isEmpty(doctor.contact)
-  if (validator.isEmpty(doctor.f_name) || validator.isEmpty(doctor.l_name) || validator.isEmpty(doctor.specification) || validator.isEmpty(doctor.contact) ) {
+  if (validator.isEmpty(personalInfo.f_name) || validator.isEmpty(personalInfo.l_name) || validator.isEmpty(personalInfo.specification) || validator.isEmpty(personalInfo.contact) ) {
     errors.push({ message: "All records required" });
   }
   //
   //Check if there are any errors
   if ( errors.length > 0 ){
-    res.json(errors);
+    return errors;
   }else{
     //db checks for similar records then storage after passing validation
     pool.query(
         `SELECT * FROM doctors 
         WHERE contact = $1`, 
-        [doctor.contact], 
-        (err,results) => {
-            if (err){
-                throw err;
-            }
-            //
+        [personalInfo.contact])
+        .then((result) => {
+          //
             //check for duplicate value in the db
-            if (results.rows.length > 0){
-                errors.push({message:"Doctor with similar phone number already registered"});
-                res.json(errors);
-                res.end();
-            }else{
-                pool.query(
-                    `INSERT INTO doctors( f_name, l_name, specification, contact) 
-                    VALUES ($1, $2, $3, $4)`,
-                    [doctor.f_name, doctor.l_name, doctor.specification, doctor.contact],
-                    (err,results) =>{ 
-                        if (err){
-                            throw err;
-                        }
-                    }
-                );
-            }
-        }
-    );
+            if (result.rows.length > 0){
+              errors.push({message:"Doctor with similar phone number already registered"});
+              return errors;
+          }else{
+              pool.query(
+                  `INSERT INTO doctors( f_name, l_name, specification, contact) 
+                  VALUES ($1, $2, $3, $4)`,
+                  [personalInfo.f_name, personalInfo.l_name, personalInfo.specification, personalInfo.contact]
+              ) .then((result) => {return result.rows;})
+              .catch((err) => {throw err;});
+          }
+        })
+        .catch((err) => {throw err;});
   }
   }
 }

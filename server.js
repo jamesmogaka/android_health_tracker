@@ -6,6 +6,8 @@ const chatRoomRouter = require("./routes/chat_rooms");
 //
 //create an instance of express
 const app = express();
+
+const server = require("http").createServer(app);
 //
 //
 const port = process.env.PORT || 8080;
@@ -21,7 +23,7 @@ app.use("/messages", messagesRouter);
 app.use("/chatroom", chatRoomRouter);
 
 //Start the app at a given port
-const server = app.listen(port, () => {
+app.listen(port, () => {
   console.log(`server listening http://localhost:${port}/`);
 });
 

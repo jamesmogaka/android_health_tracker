@@ -7,7 +7,6 @@ const doctorController = require("../controllers/doctors");
 //
 //create an instance of the router object
 const userRouter = express.Router();
-
 // patient routes /patient
 //
 //1.patient creation endpoint
@@ -20,25 +19,24 @@ res.json(patientController.getpatients());
 .post((req,res) =>{
     //
     //Add a patient user.
-    helpers.addUser("patient",req.body);
+    res.json(helpers.addUser("patient",req.body));
 })
 //
 //2.Delete & modify patient info endpoint
-userRouter.route("/patient/:id')")
-.get((req,res) =>{
-    res.json(patientController.selectPatient(req.params.id));
+userRouter.route('/patient/:ID')
+.get((req, res) => {
+    res.json(patientController.selectPatient(req.params.ID));
 })
 .delete((req,res) => {
     //call delete patient
-    res.json(patientController.deletePatient(req.params.id));
+    res.json(patientController.deletePatient(req.params.ID));
 })
 //route to modify specified patient
 .put(() => {
   //call modify patient
-  res.json(patientController.updatePatient(req.params.id));
+  res.json(patientController.updatePatient(req.params.ID));
 }
 )
-
 
 //
 //Doctor routes /doctor
@@ -57,17 +55,17 @@ addUser("doctor",req.body);
 })
 //
 //Delete & modify doctor info endpoint
-userRouter.route("/doctor/:id')")
+userRouter.route("/doctor/:ID")
 .get((req,res) =>{
-    res.json(doctorController.selectDoctor(req.params.id));
+    res.json(doctorController.selectDoctor(req.params.ID));
 })
 .delete((req,res) => {
     //call delete doctor function
-    res.json(doctorController.deleteDoctor(req.params.id));
+    res.json(doctorController.deleteDoctor(req.params.ID));
 })
 .put((req,res) => {
   //call modify doctor function
-  res.json(doctorController.updateDoctor(req.params.id));
+  res.json(doctorController.updateDoctor(req.params.ID));
 })
 
 

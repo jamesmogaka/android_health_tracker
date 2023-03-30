@@ -6,13 +6,15 @@ A backend node.js server capable of facilitating real-time communications(consul
     1. [x] Development of a database schema model.
     2. [ ] Testing of the model developed.
     3. [ ] Refinements to the model based on the test results.
-    4. [ ] Developing a module to check data input to the database for validity.
+    4. [x] Developing user validation.
    
 2. [ ] **User authentication, authorization and creation** - A user authentication and authorization system to ensure that only authorized users can access the system functionality. *Firebase authentication*
     1. [ ] Investigate on how firebase phone no authentication works in relation to the server.(front end)
-    2. [ ] Develop a user module responsible for registration of new users(patients and doctors).   
-    3. [ ] Develop a function to delete a given user
-    4. [ ] Function for updating user records 
+    2. [x] Develop a user module responsible for registration of new users(patients and doctors).   
+    3. [x] Develop a function to delete a given user.
+    4. [ ] Function for updating user records.
+    5. [ ] User authorization using jwt investigation.
+    6. [ ] Test above developed user registration module.
 3. [ ] **Real-time communication** - The ability to send and receive messages in real-time, allowing for instant communication. *socket.io*
     1. [ ] Develop a module to handle connections and a register for the connected users.
     2. [ ] Develop a module to handle user to user messaging.
@@ -27,4 +29,4 @@ A backend node.js server capable of facilitating real-time communications(consul
 6. [ ] **Calls** -
 7. [ ] **Push notifications** - The application must be able to send push notifications to users when they receive a new message, even if the app is not currently open.
 8. [ ]  **End-to-end encryption** - To ensure the security and privacy of the messages.
-9.  [ ]  **Payment module** - To ensure doctors get paid for service delivery to the patients.
+9. [ ]  **Payment module** - To ensure doctors get paid for service delivery to the patients.
