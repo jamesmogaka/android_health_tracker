@@ -16,15 +16,32 @@ userRouter.route("/patient")
 //Return a list of patients
 res.json(patientController.getpatients());
 })
-.post((req,res) =>{
+.post(async (req,res) =>{
     //
-    //Add a patient user.
-    res.json(helpers.addUser("patient",req.body));
+    //Add a patient user. 
+    //
+    //Get the firebase id from the request which will be used to extract the phone number
+    const authHeader = req.headers['Auth'];
+    const idToken = authHeader ? authHeader.split(' ')[1] : null;
+
+    if (!idToken) {
+        return res.status(401).json('Unauthorized');
+    }
+
+    try{
+        let result = await helpers.addUser("patient",req.body, idToken);
+        res.status(201).json(result);
+        res.end;
+    } catch(e){
+        res.status(401).json(e);
+        res.end;
+    }  
 })
 //
 //2.Delete & modify patient info endpoint
 userRouter.route('/patient/:ID')
 .get((req, res) => {
+
     res.json(patientController.selectPatient(req.params.ID));
 })
 .delete((req,res) => {
@@ -47,11 +64,17 @@ userRouter.route("/doctor")
 res.json(doctorController.getDoctors());
 
 })
-.post((req,res) =>{
-//
-//Add a doctor user.
-addUser("doctor",req.body);
-
+.post(async (req,res) =>{
+    //
+    //Add a Doctor user. 
+    try{
+        let result = await helpers.addUser("doctor",req.body);
+        res.status(201).json(result);
+        res.end;
+    } catch(e){
+        res.status(401).json(e);
+        res.end;
+    } 
 })
 //
 //Delete & modify doctor info endpoint
