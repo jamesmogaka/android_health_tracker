@@ -1,21 +1,24 @@
 // import modules
 const express = require('express');
 const helpers  =require("../helpers/user");
-const patientController = require("../controllers/patients");
+
+//Controller methods 
+const {
+    getPatients, 
+    deletePatient,
+    getPatient,
+    updatePatient,
+} = require("../controllers/patientsController");
 const doctorController = require("../controllers/doctors");
 
 //
 //create an instance of the router object
-const userRouter = express.Router();
+const router = express.Router();
+
 // patient routes /patient
-//
 //1.patient creation endpoint
-userRouter.route("/patient")
-.get((req,res) =>{
-//
-//Return a list of patients
-res.json(patientController.getpatients());
-})
+router.route("/patient")
+.get(getPatients)
 .post(async (req,res) =>{
     //
     //Add a patient user. 
@@ -49,25 +52,15 @@ res.json(patientController.getpatients());
 })
 //
 //2.Delete & modify patient info endpoint
-userRouter.route('/patient/:ID')
-.get((req, res) => {
-
-    res.json(patientController.selectPatient(req.params.ID));
-})
-.delete((req,res) => {
-    //call delete patient
-    res.json(patientController.deletePatient(req.params.ID));
-})
+router.route('/patient/:id')
+.get(getPatient)
+.delete(deletePatient)
 //route to modify specified patient
-.put(() => {
-  //call modify patient
-  res.json(patientController.updatePatient(req.params.ID));
-}
-)
+.put(updatePatient)
 
 //
 //Doctor routes /doctor
-userRouter.route("/doctor")
+router.route("/doctor")
 .get((req,res) =>{
 //
 //Return a list of doctors
@@ -88,7 +81,7 @@ res.json(doctorController.getDoctors());
 })
 //
 //Delete & modify doctor info endpoint
-userRouter.route("/doctor/:ID")
+router.route("/doctor/:ID")
 .get((req,res) =>{
     res.json(doctorController.selectDoctor(req.params.ID));
 })
@@ -102,4 +95,4 @@ userRouter.route("/doctor/:ID")
 })
 
 
-module.exports = userRouter;
+module.exports = router;
