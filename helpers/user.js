@@ -1,28 +1,39 @@
 // import necessary modules
 const pool = require("../config/db_config");
 const validator = require("validator");
-const admin = require('firebase-admin');
+const admin = require("../config/firebase_config");
 //
 
-admin.initializeApp();
+//
+
+//function to retrieve phone number form firebase
+let getContact = (firebaseId) =>{
+  return new Promise((resolve,reject)=>{
+    admin.auth()
+      .getUser(firebaseId)
+      .then((userRecord) => {
+        resolve(userRecord.phoneNumber);
+      })
+      .catch((error) => {
+        reject(error)
+      });
+  })
+}
 
 //a function to create a user
 function addUser(category, personalInfo, firebaseId) {
-  //
-  //
-  admin.auth().getUser(firebaseId)
-  .then((userRecord) => {
-    // Retrieve the phone number from the user record
-    const phoneNumber = userRecord.phoneNumber;
-  })
-  .catch((error) => {
-    console.error(`Error fetching user data: ${error}`);
-  });
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {  
+    //
+    //
+    //phone number
+    let phoneNumber = await getContact(firebaseId);
+
+    phoneNumber = "0".concat(phoneNumber.substr(4));
+    
     //
     //
     if (category == "patient") {
-      registerPatient(personalInfo,phoneNumber)
+      registerPatient(personalInfo, phoneNumber)
         .then((result) => {
           return resolve(result);
         })
@@ -30,7 +41,7 @@ function addUser(category, personalInfo, firebaseId) {
           return reject(errors);
         });
     } else {
-      registerDoctor(personalInfo,phoneNumber)
+      registerDoctor(personalInfo, phoneNumber)
         .then((result) => {
           return resolve(result);
         })
@@ -42,23 +53,21 @@ function addUser(category, personalInfo, firebaseId) {
 }
 //
 //
-function registerPatient(patient,phoneNumber) {
+function registerPatient(patient, phoneNumber) {
   return new Promise((resolve, reject) => {
     const errors = [];
 
     // Validation of user input
-    if (
-      validator.isEmpty(patient.f_name) ||
-      validator.isEmpty(patient.l_name) ||
-      validator.isEmpty(patient.date_of_birth) ||
-      validator.isEmpty(patient.patient_address)
-    ) {
-      errors.push({ message: "All records required" });
-      return reject(errors);
-    } else {
-      // DB checks then storage after passing validation
-      pool
-        .query(
+    
+    Object.keys(patient).forEach(key => {
+      if (validator.isEmpty(patient[key])){
+        errors.push({ message: "All records required" });
+        return reject(errors);
+      }
+    })
+
+    // DB checks then storage after passing validation
+    pool.query(
           `SELECT * FROM patients 
           WHERE contact = $1`,
           [phoneNumber]
@@ -75,11 +84,11 @@ function registerPatient(patient,phoneNumber) {
                 `INSERT INTO patients( f_name, l_name, date_of_birth, contact, patient_address) 
                   VALUES ($1, $2, $3, $4, $5) RETURNING *`,
                 [
-                  patient.f_name,
-                  patient.l_name,
-                  patient.date_of_birth,
+                  Object.keys(patient)[0],
+                  Object.keys(patient)[1],
+                  Object.keys(patient)[2],
                   phoneNumber,
-                  patient.patient_address,
+                  Object.keys(patient)[4],
                 ]
               )
               .then((result) => {
@@ -93,13 +102,11 @@ function registerPatient(patient,phoneNumber) {
         .catch((err) => {
           return reject(err);
         });
-    }
-  });
+  })
 }
-
 //
 //
-function registerDoctor(doctor,phoneNumber) {
+function registerDoctor(doctor, phoneNumber) {
   return new Promise((resolve, reject) => {
     const errors = [];
     //Validation of user input
@@ -156,5 +163,5 @@ function registerDoctor(doctor,phoneNumber) {
 //
 //
 module.exports = {
-  addUser: addUser,
+  addUser,
 };

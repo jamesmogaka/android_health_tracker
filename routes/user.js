@@ -21,21 +21,31 @@ res.json(patientController.getpatients());
     //Add a patient user. 
     //
     //Get the firebase id from the request which will be used to extract the phone number
-    const authHeader = req.headers['Auth'];
-    const idToken = authHeader ? authHeader.split(' ')[1] : null;
-
-    if (!idToken) {
+    const authHeader = req.headers['auth'];
+    //console.log(authHeader);
+    //
+    if (!authHeader) {
         return res.status(401).json('Unauthorized');
     }
-
+    helpers.addUser("patient", req.body, authHeader).then((result)=>{
+        return res.status(201).json(result);
+    })
+    .catch((error)=>{
+        return res.status(400).json(error);
+    })
+    /*
     try{
-        let result = await helpers.addUser("patient",req.body, idToken);
+        console.log("Before adding user");
+        let result = await helpers.addUser("patient", req.body, authHeader);
+        console.log("after adding user");
         res.status(201).json(result);
         res.end;
     } catch(e){
-        res.status(401).json(e);
+        console.log(e)
+        res.status(400).json(e);
         res.end;
-    }  
+    } 
+    */ 
 })
 //
 //2.Delete & modify patient info endpoint

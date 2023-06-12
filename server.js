@@ -1,30 +1,16 @@
-//Module importation
-const express = require("express");
-const userRouter = require("./routes/user");
-const messagesRouter = require("./routes/messenger");
-const chatRoomRouter = require("./routes/chat_rooms");
+const app = require('./app');
+const dotenv = require('dotenv')
 //
-//create an instance of express
-const app = express();
-
-const server = require("http").createServer(app);
 //
+dotenv.config({path: './config/config.env'})
 //
 const port = process.env.PORT || 8080;
-//
-//Middleware 
-app.use(express.urlencoded({ extended: false }));   // enables passage of data between front and back end through html
-app.use(express.json()); // parses request with body content type json
 
-//creation of the routes and how to handle them
-app.get("/" , (req,res) => res.send('Hello World'));
-app.use("/user", userRouter);
-app.use("/messages", messagesRouter);
-app.use("/chatroom", chatRoomRouter);
+//TODO:connect to database here
 
 //Start the app at a given port
-app.listen(port, () => {
-  console.log(`server listening http://localhost:${port}/`);
+const server = app.listen(port, () => {
+  console.log(`server listening http://localhost:${port}/ in ${process.env.NODE_ENV} mode`);
 });
 
 module.exports = server;
